@@ -3,7 +3,7 @@
 namespace WestSetGame.Tests
 {
     [TestClass]
-    public class BoardAddCard
+    public class BoardRemoveCard
     {
         private static readonly int BOARD_SIZE = 12;
 
@@ -12,44 +12,49 @@ namespace WestSetGame.Tests
         {
             Deck deck = new Deck();
             Card card = deck.DrawCard()!;
-            Board board = new Board(); 
+            Board board = new Board();
             board.AddCard(card, 0);
-            Assert.AreEqual(card, board.GetCards()[0], "Card should be added at valid index at start of array.");
+            Assert.AreEqual(card, board.GetCards()[0], "The index of where the card was added has card before removing.");
+            board.RemoveCard(0);
+            Assert.IsNull(board.GetCards()[0], "The index of where the card was removed is null after removing.");
         }
 
         [TestMethod]
-        public void TestShouldAddCardAtValidIndexAtEndOfArray()
+        public void TestShouldRemoveCardAtValidIndexAtEndOfArray()
         {
             Deck deck = new Deck();
             Card card = deck.DrawCard()!;
             Board board = new Board();
             board.AddCard(card, BOARD_SIZE-1);
-            Assert.AreEqual(card, board.GetCards()[BOARD_SIZE - 1], "Card should be added at valid index at end of array.");
+            Assert.AreEqual(card, board.GetCards()[BOARD_SIZE - 1], "The index of where the card was added has card before removing.");
+            board.RemoveCard(BOARD_SIZE - 1);
+            Assert.IsNull(board.GetCards()[BOARD_SIZE - 1], "The index of where the card was removed is null after removing.");
         }
 
         [TestMethod]
-        public void TestShouldAddCardAtValidIndexInMiddleOfArray()
+        public void TestShouldRemoveCardAtValidIndexInMiddleOfArray()
         {
             Deck deck = new Deck();
             Card card = deck.DrawCard()!;
             Board board = new Board();
             board.AddCard(card, 5);
-            Assert.AreEqual(card, board.GetCards()[5], "Card should be added at valid index in middle of array.");
+            Assert.AreEqual(card, board.GetCards()[5], "The index of where the card was added has card before removing.");
+            board.RemoveCard(5);
+            Assert.IsNull(board.GetCards()[5], "The index of where the card was removed is null after removing.");
         }
 
         [TestMethod]
-        public void TestShouldThrowArgumentNullExceptionOnAddNullCard()
+        public void TestShouldThrowArgumentNullExceptionOnRemoveNullCard()
         {
-            Card? card = null;
             Board board = new Board();
             try
             {
-                board.AddCard(card, 0);
+                board.RemoveCard(0);
                 Assert.Fail("An exception should have been thrown");
             }
             catch (ArgumentNullException ex)
             {
-                Assert.AreEqual("Value cannot be null (Parameter 'card')", ex.Message);
+                Assert.AreEqual("Cannot remove a null card.", ex.ParamName);
             }
         }
 
@@ -61,12 +66,12 @@ namespace WestSetGame.Tests
             Board board = new Board();
             try
             {
-                board.AddCard(card, -1);
+                board.RemoveCard(-1);
                 Assert.Fail("An exception should have been thrown");
             }
             catch (IndexOutOfRangeException ex)
             {
-                Assert.AreEqual("The index must be within the range of the board", ex.Message);
+                Assert.AreEqual("Index was outside the bounds of the array.", ex.Message);
             }
         }
 
@@ -78,33 +83,12 @@ namespace WestSetGame.Tests
             Board board = new Board();
             try
             {
-                board.AddCard(card, BOARD_SIZE);
+                board.RemoveCard(BOARD_SIZE);
                 Assert.Fail("An exception should have been thrown");
             }
             catch (IndexOutOfRangeException ex)
             {
-                Assert.AreEqual("The index must be within the range of the board", ex.Message);
-            }
-        }
-
-        [TestMethod]
-        public void TestShouldThrowArgumentExceptionWhenAddCardToIndexWithCard()
-        {
-            Deck deck = new Deck();
-            Board board = new Board();
-            for (int i = 0; i < BOARD_SIZE; i++)
-            {
-                board.AddCard(deck.DrawCard()!, i);
-            }
-
-            try
-            {
-                board.AddCard(deck.DrawCard()!, 0);
-                Assert.Fail("An exception should have been thrown");
-            }
-            catch (ArgumentException ex)
-            {
-                Assert.AreEqual("Cannot add card to board in spot that is already filled.", ex.Message);
+                Assert.AreEqual("Index was outside the bounds of the array.", ex.Message);
             }
         }
 
