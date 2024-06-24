@@ -17,209 +17,63 @@ namespace WestSetGame.Tests
         }
 
         [TestMethod]
-        public void TestValidateSetOneAttributeAllDifferentAndTheRestAllTheSame()
+        public void TestShouldValidateAllSameInts()
         {
-            List<Card> validSet = new List<Card>
-            {
-                new Card("Red", "Diamond", 1, "Solid"),
-                new Card("Red", "Diamond", 1, "Striped"),
-                new Card("Red", "Diamond", 1, "Open"),
-            };
+            List<int> attribute = new List<int> { 1, 1, 1 };
 
-            bool result = validator.ValidateSet(validSet);
+            bool result = validator.ValidateAttribute(attribute);
 
-            Assert.IsTrue(result, "Set is valid.");
+            Assert.IsTrue(result, "All elements in the list are the same.");
         }
 
         [TestMethod]
-        public void TestValidateSetTwoAttributesAllDifferentTwoAllTheSame()
+        public void TestShouldValidateAllDifferentInts()
         {
-            List<Card> validSet = new List<Card>
-            {
-                new Card("Red", "Diamond", 1, "Solid"),
-                new Card("Red", "Diamond", 2, "Striped"),
-                new Card("Red", "Diamond", 3, "Open"),
-            };
+            List<int> attribute = new List<int> { 1, 2, 3 };
 
-            bool result = validator.ValidateSet(validSet);
+            bool result = validator.ValidateAttribute(attribute);
 
-            Assert.IsTrue(result, "Set is valid.");
+            Assert.IsTrue(result, "All elements in the list are different.");
         }
 
         [TestMethod]
-        public void TestValidateSetThreeAttributesAllDifferentOneAllTheSame()
+        public void TestShouldNotValidateInts()
         {
-            List<Card> validSet = new List<Card>
-            {
-                new Card("Red", "Diamond", 1, "Solid"),
-                new Card("Red", "Oval", 2, "Striped"),
-                new Card("Red", "Squiggle", 3, "Open"),
-            };
+            List<int> attribute = new List<int> { 1, 1, 2 };
 
-            bool result = validator.ValidateSet(validSet);
+            bool result = validator.ValidateAttribute(attribute);
 
-            Assert.IsTrue(result, "Set is valid.");
+            Assert.IsFalse(result, "Attributes are not valid becuase some are the same and some are different");
         }
 
         [TestMethod]
-        public void TestValidateSetAllFourAttributesAllDifferent()
+        public void TestShouldValidateAllSameStrings()
         {
-            List<Card> validSet = new List<Card>
-            {
-                new Card("Red", "Diamond", 1, "Solid"),
-                new Card("Green", "Oval", 2, "Striped"),
-                new Card("Purple", "Squiggle", 3, "Open"),
-            };
+            List<string> attribute = new List<string> { "Red", "Red", "Red" };
 
-            bool result = validator.ValidateSet(validSet);
+            bool result = validator.ValidateAttribute(attribute);
 
-            Assert.IsTrue(result, "Set is valid.");
+            Assert.IsTrue(result, "All elements in the list are the same.");
         }
 
         [TestMethod]
-        public void TestShouldNotValidateSetWhereColorInvalid()
+        public void TestShouldValidateAllDifferentStrings()
         {
-            List<Card> invalidSet = new List<Card>
-            {
-                new Card("Red", "Diamond", 1, "Solid"),
-                new Card("Red", "Oval", 2, "Striped"),
-                new Card("Purple", "Squiggle", 3, "Open"),
-            };
+            List<string> attribute = new List<string> { "Red", "Green", "Purple" };
 
-            bool result = validator.ValidateSet(invalidSet);
+            bool result = validator.ValidateAttribute(attribute);
 
-            Assert.IsFalse(result, "Set is not valid due to color.");
+            Assert.IsTrue(result, "All elements in the list are different.");
         }
 
         [TestMethod]
-        public void TestShouldNotValidateSetWhereShapeInvalid()
+        public void TestShouldNotValidateStrings()
         {
-            List<Card> invalidSet = new List<Card>
-            {
-                new Card("Red", "Diamond", 1, "Solid"),
-                new Card("Green", "Oval", 2, "Striped"),
-                new Card("Purple", "Oval", 3, "Open"),
-            };
+            List<string> attribute = new List<string> { "Red", "Green", "Red" };
 
-            bool result = validator.ValidateSet(invalidSet);
+            bool result = validator.ValidateAttribute(attribute);
 
-            Assert.IsFalse(result, "Set is not valid due to shape.");
-        }
-
-        [TestMethod]
-        public void TestShouldNotValidateSetWhereNumberInvalid()
-        {
-            List<Card> invalidSet = new List<Card>
-            {
-                new Card("Red", "Diamond", 3, "Solid"),
-                new Card("Green", "Oval", 2, "Striped"),
-                new Card("Purple", "Squiggle", 3, "Open"),
-            };
-
-            bool result = validator.ValidateSet(invalidSet);
-
-            Assert.IsFalse(result, "Set is not valid due to number.");
-        }
-
-        [TestMethod]
-        public void TestShouldNotValidateSetWhereFillInvalid()
-        {
-            List<Card> invalidSet = new List<Card>
-            {
-                new Card("Red", "Diamond", 1, "Solid"),
-                new Card("Green", "Oval", 2, "Open"),
-                new Card("Purple", "Squiggle", 3, "Open"),
-            };
-
-            bool result = validator.ValidateSet(invalidSet);
-
-            Assert.IsFalse(result, "Set is not valid due to fill.");
-        }
-
-        [TestMethod]
-        public void TestShouldNotValidateSetWhereMultipleInvalidAttributes()
-        {
-            List<Card> invalidSet = new List<Card>
-            {
-                new Card("Red", "Diamond", 3, "Solid"),
-                new Card("Green", "Oval", 2, "Open"),
-                new Card("Purple", "Squiggle", 3, "Open"),
-            };
-
-            bool result = validator.ValidateSet(invalidSet);
-
-            Assert.IsFalse(result, "Set is not valid due to number and fill.");
-        }
-
-        [TestMethod]
-        public void TestShouldNotValidateSetWhereListIsNull()
-        {
-            List<Card> invalidSet = null;
-            try
-            {
-                validator.ValidateSet(invalidSet);
-                Assert.Fail("An exception should have been thrown");
-            }
-            catch (ArgumentNullException ex)
-            {
-                Assert.AreEqual("Value cannot be null. (Parameter 'The set to validate can not be null or empty')", ex.Message);
-            }
-        }
-
-        [TestMethod]
-        public void TestShouldNotValidateSetWhereListIsEmpty()
-        {
-            List<Card> invalidSet = new List<Card>();
-            try
-            {
-                validator.ValidateSet(invalidSet);
-                Assert.Fail("An exception should have been thrown");
-            }
-            catch (ArgumentException ex)
-            {
-                Assert.AreEqual("Value cannot be null. (Parameter 'The set to validate can not be null or empty')", ex.Message);
-            }
-        }
-
-        [TestMethod]
-        public void TestShouldNotValidateSetWhenNotEnoughCards()
-        {
-            List<Card> invalidSet = new List<Card>
-            {
-                new Card("Red", "Diamond", 3, "Solid"),
-                new Card("Green", "Oval", 2, "Open"),
-            };
-            try
-            {
-                validator.ValidateSet(invalidSet);
-                Assert.Fail("An exception should have been thrown");
-            }
-            catch (ArgumentException ex)
-            {
-                Assert.AreEqual("The set to validate can not be null or empty", ex.Message);
-            }
-        }
-
-        [TestMethod]
-        public void TestShouldNotValidateSetWhenTooManyCards()
-        {
-            List<Card> invalidSet = new List<Card>
-            {
-                new Card("Red", "Oval", 1, "Solid"),
-                new Card("Red", "Oval", 2, "Solid"),
-                 new Card("Red", "Oval", 3, "Solid"),
-                new Card("Red", "Oval", 1, "Solid"),
-            };
-            try
-            {
-                validator.ValidateSet(invalidSet);
-                Assert.Fail("An exception should have been thrown");
-            }
-            catch (ArgumentException ex)
-            {
-                Assert.AreEqual("The set to validate can not be null or empty", ex.Message);
-            }
-
+            Assert.IsFalse(result, "Attributes are not valid becuase some are the same and some are different");
         }
     }
 }
